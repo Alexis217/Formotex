@@ -6,7 +6,10 @@ export class PrismaUserRepository implements IUserRepository {
   async findByEmail(email: string): Promise<User | null> {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return null;
-    return new User(user.name, user.email, user.password, user.id);
+
+    const entity = new User(user.name, user.email, user.password, user.id);
+    (entity as any).role = user.role;
+    return entity;
   }
 
   async save(user: User): Promise<User> {
@@ -19,6 +22,9 @@ export class PrismaUserRepository implements IUserRepository {
         role: (user as any).role ?? "USER",
       },
     });
-    return new User(saved.name, saved.email, saved.password, saved.id);
+
+    const entity = new User(saved.name, saved.email, saved.password, saved.id);
+    (entity as any).role = saved.role;
+    return entity;
   }
 }

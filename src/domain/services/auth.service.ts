@@ -31,7 +31,13 @@ export class AuthService {
     const user = new User(input.name, input.email, hashed);
     (user as any).role = input.role ?? "USER";
 
-    return this.repo.save(user);
+    const saved = await this.repo.save(user);
+    return {
+      id: saved.id,
+      name: saved.name,
+      email: saved.email,
+      role: (saved as any).role,
+    };
   }
 
   // Login de usuario
