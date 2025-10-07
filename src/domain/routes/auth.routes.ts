@@ -19,8 +19,8 @@ router.post(
 // Register -> solo admin
 router.post(
   "/register",
-  // authMiddleware,
-  // ensureRole("ADMIN"),
+  authMiddleware,
+  ensureRole("ADMIN"),
   body("email").isEmail(),
   body("name").isString().notEmpty(),
   body("password").isString().isLength({ min: 6 }),
